@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: projetot_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-projetot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-projetot}
+      POSTGRES_DB: ${POSTGRES_DB:-projetot}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-projetot}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: projetot_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-projetot}:${POSTGRES_PASSWORD:-projetot}@db:5432/${POSTGRES_DB:-projetot}
+      JWT_SECRET: ${JWT_SECRET:-troque-este-segredo-em-producao}
+      EMPRESA_NOME: ${EMPRESA_NOME:-Projeto T}
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    container_name: projetot_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+
+volumes:
+  pgdata:
