@@ -229,6 +229,25 @@ tr:last-child td { border-bottom: none; }
 .tag-reprovado { background: var(--cream); color: var(--muted); }
 .btn-sm { padding: 6px 12px; font-size: 13px; border-radius: 8px; }
 
+/* ============ AGENDA / CALENDÁRIO ============ */
+.cal-nav { display: flex; align-items: center; gap: 10px; }
+.cal-title { font-family: var(--display); font-size: 18px; min-width: 150px; text-align: center; letter-spacing: -.01em; }
+.cal { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--card); box-shadow: var(--shadow-sm); }
+.cal-head { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--paper-2); border-bottom: 1px solid var(--line); }
+.cal-dow { padding: 10px; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; text-align: center; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal-cell { min-height: 104px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 6px; display: flex; flex-direction: column; gap: 4px; text-align: left; background: #fff; transition: background .12s ease; }
+.cal-cell:hover { background: var(--paper-2); }
+.cal-cell:nth-child(7n) { border-right: none; }
+.cal-cell.fora { background: #faf8f3; }
+.cal-cell.fora .cal-num { color: var(--line-strong); }
+.cal-num { font-size: 13px; font-weight: 600; color: var(--ink-soft); align-self: flex-start;
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.cal-cell.hoje .cal-num { background: var(--crimson); color: #fff; }
+.cal-evs { display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+.cal-ev { font-size: 11px; padding: 2px 6px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.linklike { background: none; border: none; color: var(--crimson); font-weight: 600; cursor: pointer; padding: 0; }
+
 .empty { text-align: center; color: var(--muted); padding: 40px 20px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .right-actions { display: flex; gap: 10px; align-items: center; }

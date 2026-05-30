@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { api, brl } from "../api";
-import { IcPlus, IcTrash, IcEdit } from "../components/Icons";
+import { IcPlus, IcTrash, IcEdit, IcCalendar } from "../components/Icons";
 
 const r2 = (n) => Math.round((Number(n) || 0) * 100) / 100;
 const VAZIO = { titulo: "", itens: [{ material_id: "", quantidade: 1 }], horas: "", valorHora: "", margem: "" };
@@ -23,6 +23,8 @@ export default function Precificacao() {
   const [salvando, setSalvando] = useState(false);
   const [msg, setMsg] = useState("");
   const [erro, setErro] = useState("");
+  const [agendaOrc, setAgendaOrc] = useState(null); // orçamento em agendamento
+  const [agendaData, setAgendaData] = useState("");
 
   const carregar = async () => {
     try {
@@ -104,8 +106,21 @@ export default function Precificacao() {
     setMsg(""); setErro("");
     try {
       await api.statusOrcamento(o.id, status);
-      if (status === "aceito") setMsg(`"${o.titulo}" aceito — baixa no estoque feita.`);
+      await carregar();
+      if (status === "aceito") { setMsg(`"${o.titulo}" aceito — baixa no estoque feita.`); abrirAgenda(o); }
       else if (status === "reprovado") setMsg(`"${o.titulo}" reprovado.`);
+    } catch (e) { setErro(e.message); }
+  };
+
+  const abrirAgenda = (o) => { setAgendaOrc(o); setAgendaData(o.agendado_em || ""); setErro(""); };
+  const salvarAgenda = async () => {
+    setErro("");
+    try {
+      await api.agendarOrcamento(agendaOrc.id, agendaData || null);
+      setMsg(agendaData
+        ? `"${agendaOrc.titulo}" agendado para ${new Date(agendaData + "T00:00:00").toLocaleDateString("pt-BR")}.`
+        : `Agendamento de "${agendaOrc.titulo}" removido.`);
+      setAgendaOrc(null);
       await carregar();
     } catch (e) { setErro(e.message); }
   };
@@ -222,7 +237,14 @@ export default function Precificacao() {
                 const [cls, label] = BADGE[o.status] || BADGE.pendente;
                 return (
                   <tr key={o.id} style={editandoId === o.id ? { background: "var(--paper-2)" } : null}>
-                    <td><b>{o.titulo}</b></td>
+                    <td>
+                      <b>{o.titulo}</b>
+                      {o.agendado_em && (
+                        <div className="muted" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 4, marginTop: 2 }}>
+                          <IcCalendar style={{ width: 12 }} /> {new Date(o.agendado_em + "T00:00:00").toLocaleDateString("pt-BR")}
+                        </div>
+                      )}
+                    </td>
                     <td className="price">{brl(o.preco_final)}</td>
                     <td><span className={`tag ${cls}`}>{label}</span></td>
                     <td className="muted">{new Date(o.criado_em).toLocaleDateString("pt-BR")}</td>
@@ -233,6 +255,9 @@ export default function Precificacao() {
                         )}
                         {(o.status === "pendente" || o.status === "aceito") && (
                           <button className="btn btn-ghost btn-sm" title="Editar" onClick={() => editar(o)}><IcEdit style={{ width: 15 }} /></button>
+                        )}
+                        {o.status !== "reprovado" && (
+                          <button className="btn btn-ghost btn-sm" title="Agendar" onClick={() => abrirAgenda(o)}><IcCalendar style={{ width: 15 }} /></button>
                         )}
                         {o.status !== "reprovado" && (
                           <button className="btn btn-ghost btn-sm" onClick={() => mudarStatus(o, "reprovado")}>Reprovar</button>
@@ -246,6 +271,26 @@ export default function Precificacao() {
           </table>
         )}
       </div>
+
+      {agendaOrc && (
+        <div className="overlay" onClick={(e) => e.target === e.currentTarget && setAgendaOrc(null)}>
+          <div className="modal">
+            <h3>Agendar “{agendaOrc.titulo}”</h3>
+            <p className="muted" style={{ margin: "-6px 0 16px" }}>Vincule este trabalho a um dia (opcional). Aparece na Agenda.</p>
+            <div className="field">
+              <label>Data do trabalho</label>
+              <input className="input" type="date" value={agendaData} onChange={(e) => setAgendaData(e.target.value)} />
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+              {agendaOrc.agendado_em && (
+                <button className="btn btn-ghost btn-sm" onClick={() => { setAgendaData(""); }}>Limpar</button>
+              )}
+              <button className="btn btn-ghost btn-block" onClick={() => setAgendaOrc(null)}>Agora não</button>
+              <button className="btn btn-primary btn-block" onClick={salvarAgenda}>Salvar agenda</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Optional
 
 from pydantic import BaseModel, EmailStr, ConfigDict
@@ -108,11 +108,31 @@ class OrcamentoDetalheOut(BaseModel):
     custo_mao_obra: float
     preco_final: float
     itens: list[dict[str, Any]]
+    aceito_em: Optional[datetime] = None
+    agendado_em: Optional[date] = None
     criado_em: datetime
 
 
 class StatusOrcamentoIn(BaseModel):
     status: str  # pendente | aceito | reprovado
+
+
+class AgendaIn(BaseModel):
+    data: Optional[date] = None  # null remove o agendamento
+
+
+# ---------- Estoque (ledger) ----------
+class MovimentoOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    material_id: Optional[int]
+    material_nome: str
+    tipo: str
+    quantidade: float
+    saldo_apos: float
+    origem: str
+    orcamento_id: Optional[int]
+    criado_em: datetime
 
 
 # ---------- Loja ----------

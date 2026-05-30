@@ -15,3 +15,4 @@ export const IcGavel = (p) => (<S {...p}><path d="M14 6 18 10M5 19l8-8M11 4l5 5-
 export const IcChevron = (p) => (<S {...p}><path d="M15 6l-6 6 6 6" /></S>);
 export const IcEdit = (p) => (<S {...p}><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" /></S>);
 export const IcAlert = (p) => (<S {...p}><path d="M12 9v4M12 17h.01" /><path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" /></S>);
+export const IcCalendar = (p) => (<S {...p}><rect x="3" y="4.5" width="18" height="16" rx="2" /><path d="M3 9h18M8 2.5v4M16 2.5v4" /></S>);

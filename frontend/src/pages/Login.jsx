@@ -42,7 +42,7 @@ export default function Login({ setLoading }) {
             <p>
               Quem não <span>mede</span> a própria arte, <br />
               acaba <span>cobrando</span> pelo medo. <br />
-              Aqui, cada risco tem preço <span>certo</span>.
+              Aqui, cada risco tem <span>preço</span> certo.
             </p>
             <span className="author">— a régua do tatuador profissional</span>
           </div>
