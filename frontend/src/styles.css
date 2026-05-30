@@ -151,11 +151,30 @@ a { color: inherit; }
 .onb__nav { display: flex; justify-content: space-between; margin-top: 30px; }
 
 /* ============ APP SHELL (estilo 2026) ============ */
-.shell { display: grid; grid-template-columns: 264px 1fr; height: 100vh; }
-.sidebar { background: var(--ink); color: var(--cream); display: flex; flex-direction: column; padding: 22px 16px; }
+.shell { display: grid; grid-template-columns: 264px 1fr; height: 100vh;
+  transition: grid-template-columns .24s cubic-bezier(.4, 0, .2, 1); }
+.shell.collapsed { grid-template-columns: 76px 1fr; }
+.sidebar { background: var(--ink); color: var(--cream); display: flex; flex-direction: column;
+  padding: 22px 16px; overflow: hidden; }
 .sidebar__brand { display: flex; align-items: center; gap: 10px; font-family: var(--display);
   font-weight: 800; font-size: 19px; padding: 6px 10px 22px; letter-spacing: -.02em; }
-.sidebar__brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--crimson); }
+.sidebar__brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--crimson); flex-shrink: 0; }
+.brand-name { white-space: nowrap; overflow: hidden; }
+.sidebar__toggle { margin-left: auto; width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; color: rgba(244,241,234,.55);
+  border: 1px solid rgba(255,255,255,.1); background: transparent; cursor: pointer;
+  transition: background .14s ease, color .14s ease; }
+.sidebar__toggle:hover { background: rgba(255,255,255,.08); color: var(--cream); }
+.sidebar__toggle svg { width: 16px; height: 16px; transition: transform .24s cubic-bezier(.4, 0, .2, 1); }
+
+/* ---- estado recolhido ---- */
+.shell.collapsed .label { display: none; }
+.shell.collapsed .sidebar__brand { justify-content: center; padding: 6px 0 22px; gap: 0; }
+.shell.collapsed .sidebar__brand .dot { display: none; }
+.shell.collapsed .sidebar__toggle { margin-left: 0; }
+.shell.collapsed .sidebar__toggle svg { transform: rotate(180deg); }
+.shell.collapsed .nav__item { justify-content: center; padding: 11px 0; gap: 0; }
+.shell.collapsed .sidebar__user { justify-content: center; padding: 12px 0; }
 .nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .nav__item {
   display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 10px;

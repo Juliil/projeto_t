@@ -12,3 +12,4 @@ export const IcBell = (p) => (<S {...p}><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 
 export const IcPlus = (p) => (<S {...p}><path d="M12 5v14M5 12h14" /></S>);
 export const IcTrash = (p) => (<S {...p}><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /></S>);
 export const IcGavel = (p) => (<S {...p}><path d="M14 6 18 10M5 19l8-8M11 4l5 5-3 3-5-5zM3 21h7" /></S>);
+export const IcChevron = (p) => (<S {...p}><path d="M15 6l-6 6 6 6" /></S>);
