@@ -49,6 +49,9 @@ export const api = {
   statusOrcamento: (id, status) => req(`/api/precificacao/orcamentos/${id}/status`, { method: "PATCH", body: { status } }),
   orcamentos: () => req("/api/precificacao/orcamentos"),
 
+  ncms: () => req("/api/fiscal/ncm"),
+  simularEntrada: (d) => req("/api/fiscal/simular-entrada", { method: "POST", body: d }),
+
   loja: () => req("/api/loja"),
   criarAnuncio: (d) => req("/api/loja", { method: "POST", body: d }),
   ofertar: (id, valor) => req(`/api/loja/${id}/oferta`, { method: "POST", body: { valor } }),

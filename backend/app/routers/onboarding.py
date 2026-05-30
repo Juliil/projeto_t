@@ -12,6 +12,12 @@ router = APIRouter(prefix="/api/onboarding", tags=["onboarding"])
 PERGUNTAS = [
     {"id": "nome_estudio", "label": "Qual o nome do seu estúdio?", "tipo": "texto", "placeholder": "Ex: Black Ink Studio"},
     {"id": "cidade", "label": "Em qual cidade você atua?", "tipo": "texto", "placeholder": "Ex: Manaus"},
+    {
+        "id": "regime",
+        "label": "Qual seu regime hoje?",
+        "tipo": "opcao",
+        "opcoes": ["MEI", "Simples Nacional", "Ainda não me formalizei", "Outro"],
+    },
     {"id": "anos_experiencia", "label": "Quantos anos de experiência você tem?", "tipo": "numero", "placeholder": "Ex: 5"},
     {
         "id": "estilo_principal",

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, brl } from "../api";
 import { IcPlus, IcTrash, IcEdit, IcAlert } from "../components/Icons";
+import SimuladorZFM from "../components/SimuladorZFM";
 
 const CATEGORIAS = ["Agulhas", "Cartuchos", "Tintas", "Biqueiras", "Descartáveis", "Biossegurança", "Outros"];
 const UNIDADES = ["un", "ml", "g", "caixa", "sessão"];
@@ -10,6 +11,7 @@ const VAZIO = { nome: "", categoria: "Agulhas", unidade: "un", custo_unitario: "
 const emFalta = (m) => Number(m.estoque_minimo) > 0 && Number(m.estoque) <= Number(m.estoque_minimo);
 
 export default function Materiais() {
+  const [aba, setAba] = useState("estoque");
   const [itens, setItens] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [aberto, setAberto] = useState(false);
@@ -82,9 +84,24 @@ export default function Materiais() {
           <h2 style={{ fontFamily: "var(--display)", fontSize: 28, letterSpacing: "-.02em" }}>Materiais</h2>
           <p className="muted" style={{ marginTop: 4 }}>Sua base de custo — usada na precificação dos trabalhos.</p>
         </div>
-        <button className="btn btn-primary" onClick={abrirNovo}><IcPlus style={{ width: 18 }} /> Novo material</button>
+        {aba === "estoque" && (
+          <button className="btn btn-primary" onClick={abrirNovo}><IcPlus style={{ width: 18 }} /> Novo material</button>
+        )}
       </div>
 
+      <div className="tabs" style={{ maxWidth: 360, marginBottom: 20 }}>
+        <button className={aba === "estoque" ? "active" : ""} onClick={() => setAba("estoque")}>Estoque</button>
+        <button className={aba === "economia" ? "active" : ""} onClick={() => setAba("economia")}>Economia ZFM</button>
+      </div>
+
+      {aba === "economia" && (
+        <div className="panel">
+          <div className="panel__head"><h3>Economia ZFM — compra de insumos</h3></div>
+          <div className="panel__body"><SimuladorZFM /></div>
+        </div>
+      )}
+
+      {aba === "estoque" && (<>
       <div className="cards">
         <div className="stat"><div className="k">Materiais cadastrados</div><div className="v">{itens.length}</div></div>
         <div className="stat"><div className="k">Valor em estoque</div><div className="v" style={{ fontSize: 26 }}>{brl(valorEstoque)}</div></div>
@@ -143,6 +160,7 @@ export default function Materiais() {
           </table>
         )}
       </div>
+      </>)}
 
       {aberto && (
         <div className="overlay" onClick={(e) => e.target === e.currentTarget && setAberto(false)}>

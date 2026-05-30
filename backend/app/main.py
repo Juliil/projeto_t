@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config import EMPRESA_NOME
+from .config import EMPRESA_NOME, LIMITE_MEI_ANUAL
 from .routers import auth, materials, onboarding, pricing, store
 from .distrib.fiscal.router import router as fiscal_router
 
@@ -32,4 +32,4 @@ def raiz():
 
 @app.get("/api/config")
 def config_publica():
-    return {"empresa_nome": EMPRESA_NOME}
+    return {"empresa_nome": EMPRESA_NOME, "limite_mei_anual": LIMITE_MEI_ANUAL}
