@@ -41,6 +41,7 @@ class Orcamento(Base):
     custo_materiais = Column(Numeric(12, 2), nullable=False, default=0)
     custo_mao_obra = Column(Numeric(12, 2), nullable=False, default=0)
     preco_final = Column(Numeric(12, 2), nullable=False, default=0)
+    status = Column(Text, nullable=False, default="pendente")  # pendente | aceito | reprovado
     itens = Column(JSONB, nullable=False, default=list)
     criado_em = Column(TIMESTAMP(timezone=True), server_default=func.now())
 

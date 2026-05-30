@@ -45,6 +45,8 @@ export const api = {
 
   calcular: (d) => req("/api/precificacao/calcular", { method: "POST", body: d }),
   salvarOrcamento: (d) => req("/api/precificacao/salvar", { method: "POST", body: d }),
+  atualizarOrcamento: (id, d) => req(`/api/precificacao/orcamentos/${id}`, { method: "PUT", body: d }),
+  statusOrcamento: (id, status) => req(`/api/precificacao/orcamentos/${id}/status`, { method: "PATCH", body: { status } }),
   orcamentos: () => req("/api/precificacao/orcamentos"),
 
   loja: () => req("/api/loja"),

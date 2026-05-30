@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import Materiais from "./pages/Materiais";
+import Precificacao from "./pages/Precificacao";
 import Sidebar from "./components/Sidebar";
 import Loading from "./components/Loading";
 import { IcBell } from "./components/Icons";
@@ -43,7 +44,7 @@ function Shell() {
     switch (active) {
       case "home": return <Dashboard onNav={setActive} />;
       case "materiais": return <Materiais />;
-      case "precificacao": return <EmBreve parte={3} />;
+      case "precificacao": return <Precificacao />;
       case "loja": return <EmBreve parte={4} />;
       default: return null;
     }
