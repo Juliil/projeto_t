@@ -3,6 +3,8 @@ import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
+import Materiais from "./pages/Materiais";
+import Precificacao from "./pages/Precificacao";
 import Sidebar from "./components/Sidebar";
 import Loading from "./components/Loading";
 import { IcBell } from "./components/Icons";
@@ -41,8 +43,8 @@ function Shell() {
   const render = () => {
     switch (active) {
       case "home": return <Dashboard onNav={setActive} />;
-      case "materiais": return <EmBreve parte={2} />;
-      case "precificacao": return <EmBreve parte={3} />;
+      case "materiais": return <Materiais />;
+      case "precificacao": return <Precificacao />;
       case "loja": return <EmBreve parte={4} />;
       default: return null;
     }

@@ -42,6 +42,7 @@ class MaterialIn(BaseModel):
     unidade: str = "un"
     custo_unitario: float = 0
     estoque: float = 0
+    estoque_minimo: float = 0
 
 
 class MaterialOut(BaseModel):
@@ -52,6 +53,7 @@ class MaterialOut(BaseModel):
     unidade: str
     custo_unitario: float
     estoque: float
+    estoque_minimo: float
 
 
 # ---------- Precificação ----------
@@ -90,7 +92,27 @@ class OrcamentoSalvoOut(BaseModel):
     id: int
     titulo: str
     preco_final: float
+    status: str
     criado_em: datetime
+
+
+class OrcamentoDetalheOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    titulo: str
+    status: str
+    horas: float
+    valor_hora: float
+    margem_pct: float
+    custo_materiais: float
+    custo_mao_obra: float
+    preco_final: float
+    itens: list[dict[str, Any]]
+    criado_em: datetime
+
+
+class StatusOrcamentoIn(BaseModel):
+    status: str  # pendente | aceito | reprovado
 
 
 # ---------- Loja ----------

@@ -26,6 +26,7 @@ class Material(Base):
     unidade = Column(Text, nullable=False, default="un")
     custo_unitario = Column(Numeric(12, 2), nullable=False, default=0)
     estoque = Column(Numeric(12, 2), nullable=False, default=0)
+    estoque_minimo = Column(Numeric(12, 2), nullable=False, default=0)
     criado_em = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
 
@@ -40,6 +41,7 @@ class Orcamento(Base):
     custo_materiais = Column(Numeric(12, 2), nullable=False, default=0)
     custo_mao_obra = Column(Numeric(12, 2), nullable=False, default=0)
     preco_final = Column(Numeric(12, 2), nullable=False, default=0)
+    status = Column(Text, nullable=False, default="pendente")  # pendente | aceito | reprovado
     itens = Column(JSONB, nullable=False, default=list)
     criado_em = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
@@ -65,3 +67,8 @@ class LojaOferta(Base):
     usuario_id = Column(BigInteger, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     valor = Column(Numeric(12, 2), nullable=False)
     criado_em = Column(TIMESTAMP(timezone=True), server_default=func.now())
+
+
+# --- Domínio distribuidora (B2B) ---
+# Importado aqui para registrar as tabelas no Base.metadata (Alembic/testes).
+from .distrib.fiscal import models as _fiscal_models  # noqa: E402,F401

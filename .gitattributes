@@ -1,0 +1,13 @@
+# Normaliza fim de linha: texto em LF no repositório (cross-platform).
+* text=auto eol=lf
+
+# Scripts e arquivos que DEVEM ser LF (rodam em container Linux)
+*.sh text eol=lf
+entrypoint.sh text eol=lf
+
+# Binários — nunca normalizar
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

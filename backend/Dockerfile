@@ -5,10 +5,18 @@ WORKDIR /code
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-COPY requirements.txt .
+# Deps de produção (imagem enxuta; deps de teste instaladas sob demanda)
+COPY requirements.txt requirements-dev.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Migrations (Alembic é o dono do schema), código e testes
+COPY alembic.ini pytest.ini ./
+COPY alembic ./alembic
 COPY app ./app
+COPY tests ./tests
+COPY entrypoint.sh ./
+RUN chmod +x entrypoint.sh
 
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Aplica migrations e sobe a API
+CMD ["./entrypoint.sh"]

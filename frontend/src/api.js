@@ -40,11 +40,17 @@ export const api = {
 
   materiais: () => req("/api/materiais"),
   criarMaterial: (d) => req("/api/materiais", { method: "POST", body: d }),
+  atualizarMaterial: (id, d) => req(`/api/materiais/${id}`, { method: "PUT", body: d }),
   removerMaterial: (id) => req(`/api/materiais/${id}`, { method: "DELETE" }),
 
   calcular: (d) => req("/api/precificacao/calcular", { method: "POST", body: d }),
   salvarOrcamento: (d) => req("/api/precificacao/salvar", { method: "POST", body: d }),
+  atualizarOrcamento: (id, d) => req(`/api/precificacao/orcamentos/${id}`, { method: "PUT", body: d }),
+  statusOrcamento: (id, status) => req(`/api/precificacao/orcamentos/${id}/status`, { method: "PATCH", body: { status } }),
   orcamentos: () => req("/api/precificacao/orcamentos"),
+
+  ncms: () => req("/api/fiscal/ncm"),
+  simularEntrada: (d) => req("/api/fiscal/simular-entrada", { method: "POST", body: d }),
 
   loja: () => req("/api/loja"),
   criarAnuncio: (d) => req("/api/loja", { method: "POST", body: d }),
