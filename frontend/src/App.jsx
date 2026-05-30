@@ -28,7 +28,15 @@ function EmBreve({ parte }) {
 function Shell() {
   const { user } = useAuth();
   const [active, setActive] = useState("home");
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem("sidebar:collapsed") === "1");
   const inicial = (user?.nome || "?").trim().charAt(0).toUpperCase();
+
+  const toggleSidebar = () =>
+    setCollapsed((c) => {
+      const next = !c;
+      localStorage.setItem("sidebar:collapsed", next ? "1" : "0");
+      return next;
+    });
 
   const render = () => {
     switch (active) {
@@ -41,8 +49,8 @@ function Shell() {
   };
 
   return (
-    <div className="shell">
-      <Sidebar active={active} onNav={setActive} />
+    <div className={`shell ${collapsed ? "collapsed" : ""}`}>
+      <Sidebar active={active} onNav={setActive} collapsed={collapsed} onToggle={toggleSidebar} />
       <div className="main">
         <div className="topbar">
           <h1>{TITULOS[active]}</h1>
