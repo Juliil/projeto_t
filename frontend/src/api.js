@@ -40,6 +40,7 @@ export const api = {
 
   materiais: () => req("/api/materiais"),
   criarMaterial: (d) => req("/api/materiais", { method: "POST", body: d }),
+  atualizarMaterial: (id, d) => req(`/api/materiais/${id}`, { method: "PUT", body: d }),
   removerMaterial: (id) => req(`/api/materiais/${id}`, { method: "DELETE" }),
 
   calcular: (d) => req("/api/precificacao/calcular", { method: "POST", body: d }),

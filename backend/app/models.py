@@ -26,6 +26,7 @@ class Material(Base):
     unidade = Column(Text, nullable=False, default="un")
     custo_unitario = Column(Numeric(12, 2), nullable=False, default=0)
     estoque = Column(Numeric(12, 2), nullable=False, default=0)
+    estoque_minimo = Column(Numeric(12, 2), nullable=False, default=0)
     criado_em = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
 

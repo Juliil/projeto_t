@@ -42,6 +42,7 @@ class MaterialIn(BaseModel):
     unidade: str = "un"
     custo_unitario: float = 0
     estoque: float = 0
+    estoque_minimo: float = 0
 
 
 class MaterialOut(BaseModel):
@@ -52,6 +53,7 @@ class MaterialOut(BaseModel):
     unidade: str
     custo_unitario: float
     estoque: float
+    estoque_minimo: float
 
 
 # ---------- Precificação ----------
