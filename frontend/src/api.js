@@ -47,6 +47,7 @@ export const api = {
   salvarOrcamento: (d) => req("/api/precificacao/salvar", { method: "POST", body: d }),
   atualizarOrcamento: (id, d) => req(`/api/precificacao/orcamentos/${id}`, { method: "PUT", body: d }),
   statusOrcamento: (id, status) => req(`/api/precificacao/orcamentos/${id}/status`, { method: "PATCH", body: { status } }),
+  agendarOrcamento: (id, data) => req(`/api/precificacao/orcamentos/${id}/agenda`, { method: "PATCH", body: { data } }),
   orcamentos: () => req("/api/precificacao/orcamentos"),
 
   ncms: () => req("/api/fiscal/ncm"),

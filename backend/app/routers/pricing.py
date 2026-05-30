@@ -1,10 +1,13 @@
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..db import get_db
+from ..estoque import aplicar_movimento
 from ..models import Material, Orcamento, Usuario
 from ..schemas import (
-    CalcularIn, OrcamentoDetalheOut, OrcamentoOut, OrcamentoSalvoOut, StatusOrcamentoIn,
+    AgendaIn, CalcularIn, OrcamentoDetalheOut, OrcamentoOut, OrcamentoSalvoOut, StatusOrcamentoIn,
 )
 from ..security import get_current_user
 
@@ -55,16 +58,22 @@ def _consumo(itens: list[dict]) -> dict[int, float]:
     return agg
 
 
-def _reconciliar_estoque(db: Session, usuario: Usuario, antigo: dict[int, float], novo: dict[int, float]) -> None:
-    """Aplica (novo - antigo) como baixa no estoque. Delta negativo devolve."""
+def _reconciliar_estoque(
+    db: Session, usuario: Usuario, antigo: dict[int, float], novo: dict[int, float],
+    origem: str, orcamento_id: int,
+) -> None:
+    """Aplica a diferença de consumo (novo - antigo) como movimentação de estoque.
+
+    Consumo maior => saída; menor (edição/devolução) => entrada. Tudo via ledger.
+    """
     for mid in set(antigo) | set(novo):
-        delta = novo.get(mid, 0.0) - antigo.get(mid, 0.0)
-        if delta == 0:
+        consumo_delta = novo.get(mid, 0.0) - antigo.get(mid, 0.0)
+        if consumo_delta == 0:
             continue
         material = db.get(Material, mid)
         if not material or material.usuario_id != usuario.id:
             continue  # material removido/alheio: não mexe no estoque
-        material.estoque = round(float(material.estoque) - delta, 2)
+        aplicar_movimento(db, usuario.id, material, -consumo_delta, origem=origem, orcamento_id=orcamento_id)
 
 
 @router.post("/calcular", response_model=OrcamentoOut)
@@ -122,8 +131,24 @@ def alterar_status(
     orc = _get_orc(orc_id, db, usuario)
     antigo = _consumo(orc.itens) if orc.status == "aceito" else {}
     novo = _consumo(orc.itens) if dados.status == "aceito" else {}
-    _reconciliar_estoque(db, usuario, antigo, novo)
+    _reconciliar_estoque(db, usuario, antigo, novo, origem="orcamento", orcamento_id=orc.id)
     orc.status = dados.status
+    orc.aceito_em = datetime.now(timezone.utc) if dados.status == "aceito" else None
+    db.commit()
+    db.refresh(orc)
+    return orc
+
+
+@router.patch("/orcamentos/{orc_id}/agenda", response_model=OrcamentoDetalheOut)
+def agendar(
+    orc_id: int,
+    dados: AgendaIn,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(get_current_user),
+):
+    """Vincula (ou remove, com data=null) o orçamento a um dia na agenda."""
+    orc = _get_orc(orc_id, db, usuario)
+    orc.agendado_em = dados.data
     db.commit()
     db.refresh(orc)
     return orc
@@ -140,7 +165,8 @@ def atualizar(
     r = _calcular(dados, db, usuario)
     # Se já está aceito, ajusta o estoque pela diferença de consumo.
     if orc.status == "aceito":
-        _reconciliar_estoque(db, usuario, _consumo(orc.itens), _consumo(r["itens"]))
+        _reconciliar_estoque(db, usuario, _consumo(orc.itens), _consumo(r["itens"]),
+                             origem="edicao_orcamento", orcamento_id=orc.id)
     orc.titulo = r["titulo"]
     orc.horas = dados.horas
     orc.valor_hora = dados.valor_hora

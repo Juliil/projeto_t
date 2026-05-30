@@ -1,10 +1,11 @@
 import { useAuth } from "../context/AuthContext";
-import { IcHome, IcBox, IcCalc, IcStore, IcLogout, IcChevron } from "./Icons";
+import { IcHome, IcBox, IcCalc, IcStore, IcLogout, IcChevron, IcCalendar } from "./Icons";
 
 const ITEMS = [
   { id: "home", label: "Início", Icon: IcHome },
   { id: "materiais", label: "Materiais", Icon: IcBox },
   { id: "precificacao", label: "Precificação", Icon: IcCalc },
+  { id: "agenda", label: "Agenda", Icon: IcCalendar },
   { id: "loja", label: "Loja", Icon: IcStore },
 ];
 
