@@ -65,3 +65,8 @@ class LojaOferta(Base):
     usuario_id = Column(BigInteger, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     valor = Column(Numeric(12, 2), nullable=False)
     criado_em = Column(TIMESTAMP(timezone=True), server_default=func.now())
+
+
+# --- Domínio distribuidora (B2B) ---
+# Importado aqui para registrar as tabelas no Base.metadata (Alembic/testes).
+from .distrib.fiscal import models as _fiscal_models  # noqa: E402,F401

@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import EMPRESA_NOME
 from .routers import auth, materials, onboarding, pricing, store
+from .distrib.fiscal.router import router as fiscal_router
 
 # O schema é de responsabilidade do Alembic (ver docs/architecture.md).
 # O container roda `alembic upgrade head` no startup, antes do uvicorn.
@@ -21,6 +22,7 @@ app.include_router(onboarding.router)
 app.include_router(materials.router)
 app.include_router(pricing.router)
 app.include_router(store.router)
+app.include_router(fiscal_router)  # domínio distribuidora (B2B)
 
 
 @app.get("/")
