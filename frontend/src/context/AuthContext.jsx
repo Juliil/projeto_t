@@ -30,8 +30,8 @@ export function AuthProvider({ children }) {
     setUser(await api.me());
   };
 
-  const preRegistro = async (nome, email, senha) => {
-    const r = await api.preRegistro({ nome, email, senha });
+  const preRegistro = async (dados) => {
+    const r = await api.preRegistro(dados);
     setToken(r.access_token);
     setUser(await api.me());
   };

@@ -5,10 +5,11 @@ import TattooMachine from "../components/TattooMachine";
 export default function Login({ setLoading }) {
   const { login, preRegistro, empresa } = useAuth();
   const [tab, setTab] = useState("login"); // login | primeiro
-  const [form, setForm] = useState({ nome: "", email: "", senha: "" });
+  const [form, setForm] = useState({ nome: "", email: "", senha: "", tipo: "estudio", crc: "", uf_crc: "" });
   const [err, setErr] = useState(null);
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const ehContador = form.tipo === "contador";
 
   const submit = async () => {
     setErr(null);
@@ -18,7 +19,11 @@ export default function Login({ setLoading }) {
         await login(form.email, form.senha);
       } else {
         if (!form.nome.trim()) throw new Error("Informe seu nome");
-        await preRegistro(form.nome, form.email, form.senha);
+        if (ehContador && !form.crc.trim()) throw new Error("Informe seu CRC");
+        await preRegistro({
+          nome: form.nome, email: form.email, senha: form.senha, tipo: form.tipo,
+          crc: ehContador ? form.crc : null, uf_crc: ehContador ? form.uf_crc : null,
+        });
       }
     } catch (e) {
       setLoading(false);
@@ -74,10 +79,35 @@ export default function Login({ setLoading }) {
           {err && <div className="err">{err}</div>}
 
           {tab === "primeiro" && (
-            <div className="field">
-              <label>Nome</label>
-              <input className="input" value={form.nome} onChange={set("nome")} onKeyDown={onKey} placeholder="Como podemos te chamar?" />
-            </div>
+            <>
+              <div className="field">
+                <label>Você é…</label>
+                <div className="tabs" style={{ marginBottom: 0 }}>
+                  <button type="button" className={!ehContador ? "active" : ""} onClick={() => setForm({ ...form, tipo: "estudio" })}>
+                    Tatuador / Estúdio
+                  </button>
+                  <button type="button" className={ehContador ? "active" : ""} onClick={() => setForm({ ...form, tipo: "contador" })}>
+                    Contador
+                  </button>
+                </div>
+              </div>
+              <div className="field">
+                <label>Nome</label>
+                <input className="input" value={form.nome} onChange={set("nome")} onKeyDown={onKey} placeholder="Como podemos te chamar?" />
+              </div>
+              {ehContador && (
+                <div className="row2">
+                  <div className="field">
+                    <label>CRC</label>
+                    <input className="input" value={form.crc} onChange={set("crc")} onKeyDown={onKey} placeholder="Ex.: AM-012345/O" />
+                  </div>
+                  <div className="field">
+                    <label>UF</label>
+                    <input className="input" value={form.uf_crc} onChange={set("uf_crc")} onKeyDown={onKey} placeholder="AM" maxLength={2} />
+                  </div>
+                </div>
+              )}
+            </>
           )}
           <div className="field">
             <label>E-mail</label>

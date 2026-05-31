@@ -13,6 +13,7 @@ class Usuario(Base):
     senha_hash = Column(Text, nullable=False)
     nome = Column(Text, nullable=False)
     status = Column(Text, nullable=False, default="pre_registro")
+    tipo = Column(Text, nullable=False, default="estudio")  # estudio | contador
     perfil = Column(JSONB, nullable=False, default=dict)
     criado_em = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
@@ -95,3 +96,5 @@ class EstoqueMovimento(Base):
 # --- Domínio distribuidora (B2B) ---
 # Importado aqui para registrar as tabelas no Base.metadata (Alembic/testes).
 from .distrib.fiscal import models as _fiscal_models  # noqa: E402,F401
+# --- Módulo Contabilidade Connect (v1.1) ---
+from .contabilidade import models as _contabilidade_models  # noqa: E402,F401

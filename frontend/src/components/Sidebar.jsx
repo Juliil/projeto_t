@@ -1,11 +1,12 @@
 import { useAuth } from "../context/AuthContext";
-import { IcHome, IcBox, IcCalc, IcStore, IcLogout, IcChevron, IcCalendar } from "./Icons";
+import { IcHome, IcBox, IcCalc, IcStore, IcLogout, IcChevron, IcCalendar, IcReceipt } from "./Icons";
 
 const ITEMS = [
   { id: "home", label: "Início", Icon: IcHome },
   { id: "materiais", label: "Materiais", Icon: IcBox },
   { id: "precificacao", label: "Precificação", Icon: IcCalc },
   { id: "agenda", label: "Agenda", Icon: IcCalendar },
+  { id: "contabilidade", label: "Contabilidade", Icon: IcReceipt },
   { id: "loja", label: "Loja", Icon: IcStore },
 ];
 

@@ -53,6 +53,27 @@ export const api = {
   ncms: () => req("/api/fiscal/ncm"),
   simularEntrada: (d) => req("/api/fiscal/simular-entrada", { method: "POST", body: d }),
 
+  saudeContabil: () => req("/api/contabilidade/saude"),
+  receitas: () => req("/api/contabilidade/receitas"),
+  criarReceita: (d) => req("/api/contabilidade/receitas", { method: "POST", body: d }),
+  removerReceita: (id) => req(`/api/contabilidade/receitas/${id}`, { method: "DELETE" }),
+  sinalizarContador: (d = {}) => req("/api/contabilidade/sinalizar", { method: "POST", body: d }),
+  // estúdio ↔ contador
+  interesses: () => req("/api/contabilidade/interesses"),
+  aceitarInteresse: (id, escopo) => req(`/api/contabilidade/interesses/${id}/aceitar`, { method: "POST", body: { escopo } }),
+  vinculoContabil: () => req("/api/contabilidade/vinculo"),
+  encerrarVinculo: () => req("/api/contabilidade/vinculo/encerrar", { method: "POST" }),
+  mensagensVinculo: () => req("/api/contabilidade/vinculo/mensagens"),
+  enviarMensagemEstudio: (corpo) => req("/api/contabilidade/vinculo/mensagens", { method: "POST", body: { corpo } }),
+  // portal do contador
+  contadorMe: () => req("/api/contador/me"),
+  contadorLeads: () => req("/api/contador/leads"),
+  manifestarInteresse: (sid, mensagem) => req(`/api/contador/leads/${sid}/interesse`, { method: "POST", body: { mensagem } }),
+  contadorVinculos: () => req("/api/contador/vinculos"),
+  contadorDados: (vid) => req(`/api/contador/vinculos/${vid}/dados`),
+  contadorMensagens: (vid) => req(`/api/contador/vinculos/${vid}/mensagens`),
+  enviarMensagemContador: (vid, corpo) => req(`/api/contador/vinculos/${vid}/mensagens`, { method: "POST", body: { corpo } }),
+
   loja: () => req("/api/loja"),
   criarAnuncio: (d) => req("/api/loja", { method: "POST", body: d }),
   ofertar: (id, valor) => req(`/api/loja/${id}/oferta`, { method: "POST", body: { valor } }),
