@@ -53,6 +53,12 @@ export const api = {
   ncms: () => req("/api/fiscal/ncm"),
   simularEntrada: (d) => req("/api/fiscal/simular-entrada", { method: "POST", body: d }),
 
+  saudeContabil: () => req("/api/contabilidade/saude"),
+  receitas: () => req("/api/contabilidade/receitas"),
+  criarReceita: (d) => req("/api/contabilidade/receitas", { method: "POST", body: d }),
+  removerReceita: (id) => req(`/api/contabilidade/receitas/${id}`, { method: "DELETE" }),
+  sinalizarContador: (d = {}) => req("/api/contabilidade/sinalizar", { method: "POST", body: d }),
+
   loja: () => req("/api/loja"),
   criarAnuncio: (d) => req("/api/loja", { method: "POST", body: d }),
   ofertar: (id, valor) => req(`/api/loja/${id}/oferta`, { method: "POST", body: { valor } }),

@@ -95,3 +95,5 @@ class EstoqueMovimento(Base):
 # --- Domínio distribuidora (B2B) ---
 # Importado aqui para registrar as tabelas no Base.metadata (Alembic/testes).
 from .distrib.fiscal import models as _fiscal_models  # noqa: E402,F401
+# --- Módulo Contabilidade Connect (v1.1) ---
+from .contabilidade import models as _contabilidade_models  # noqa: E402,F401

@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Materiais from "./pages/Materiais";
 import Precificacao from "./pages/Precificacao";
 import Agenda from "./pages/Agenda";
+import Contabilidade from "./pages/Contabilidade";
 import Sidebar from "./components/Sidebar";
 import Loading from "./components/Loading";
 import { IcBell } from "./components/Icons";
@@ -15,6 +16,7 @@ const TITULOS = {
   materiais: "Materiais",
   precificacao: "Precificação",
   agenda: "Agenda",
+  contabilidade: "Contabilidade",
   loja: "Loja",
 };
 
@@ -48,6 +50,7 @@ function Shell() {
       case "materiais": return <Materiais />;
       case "precificacao": return <Precificacao />;
       case "agenda": return <Agenda onNav={setActive} />;
+      case "contabilidade": return <Contabilidade />;
       case "loja": return <EmBreve parte={4} />;
       default: return null;
     }
