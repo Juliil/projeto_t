@@ -5,6 +5,7 @@ from .config import EMPRESA_NOME, LIMITE_MEI_ANUAL
 from .routers import auth, estoque, materials, onboarding, pricing, store
 from .distrib.fiscal.router import router as fiscal_router
 from .contabilidade.router import router as contabilidade_router
+from .contabilidade.contador_router import router as contador_router
 
 # O schema é de responsabilidade do Alembic (ver docs/architecture.md).
 # O container roda `alembic upgrade head` no startup, antes do uvicorn.
@@ -26,6 +27,7 @@ app.include_router(store.router)
 app.include_router(estoque.router)
 app.include_router(fiscal_router)  # domínio distribuidora (B2B)
 app.include_router(contabilidade_router)  # módulo Contabilidade Connect (v1.1)
+app.include_router(contador_router)       # portal do contador (v1.1 slice 2)
 
 
 @app.get("/")

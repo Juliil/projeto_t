@@ -7,6 +7,7 @@ import Materiais from "./pages/Materiais";
 import Precificacao from "./pages/Precificacao";
 import Agenda from "./pages/Agenda";
 import Contabilidade from "./pages/Contabilidade";
+import ContadorPortal from "./pages/ContadorPortal";
 import Sidebar from "./components/Sidebar";
 import Loading from "./components/Loading";
 import { IcBell } from "./components/Icons";
@@ -81,6 +82,7 @@ export default function App() {
 
   let view;
   if (!user) view = <Login setLoading={setTransicao} />;
+  else if (user.tipo === "contador") view = <ContadorPortal />;
   else if (user.status === "pre_registro") view = <Onboarding setLoading={setTransicao} />;
   else view = <Shell />;
 

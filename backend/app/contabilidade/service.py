@@ -11,11 +11,50 @@ from typing import Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ..models import Orcamento
+from ..models import Material, Orcamento, Usuario
 from .models import Receita
 
 # Limiar do gatilho de teto (parametrizável). # FISCAL: validar com contador.
 LIMIAR_GATILHO_TETO = 0.75
+
+# Escopos de dados que o estúdio pode liberar (LGPD — granular).
+ESCOPOS_DISPONIVEIS = ["faturamento", "estoque", "regime_fiscal"]
+
+
+def faixa_faturamento(valor: float) -> str:
+    """Faixa anonimizada (sem valor exato) para o mural do contador."""
+    if valor < 20000:
+        return "Até R$ 20 mil"
+    if valor < 40000:
+        return "R$ 20–40 mil"
+    if valor < 60000:
+        return "R$ 40–60 mil"
+    if valor <= 81000:
+        return "R$ 60–81 mil"
+    return "Acima de R$ 81 mil"
+
+
+def pacote_dados(db: Session, estudio: Usuario, escopo: list[str], teto: float) -> dict:
+    """Monta o pacote de dados CONSENTIDO (só o que está no escopo liberado)."""
+    pacote: dict = {}
+    escopo = escopo or []
+    if "faturamento" in escopo:
+        s = calcular_saude(db, estudio.id, teto)
+        pacote["faturamento"] = {
+            "faturamento_12m": s.faturamento_12m,
+            "pct_teto": s.pct_teto,
+            "media_mensal": s.media_mensal,
+            "projecao_estouro": s.projecao_estouro.isoformat() if s.projecao_estouro else None,
+        }
+    if "regime_fiscal" in escopo:
+        pacote["regime_fiscal"] = (estudio.perfil or {}).get("regime")
+    if "estoque" in escopo:
+        materiais = db.query(Material).filter(Material.usuario_id == estudio.id).all()
+        pacote["estoque"] = {
+            "itens": len(materiais),
+            "valor_total": round(sum(float(m.custo_unitario) * float(m.estoque) for m in materiais), 2),
+        }
+    return pacote
 
 
 @dataclass

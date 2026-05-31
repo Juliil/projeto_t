@@ -46,3 +46,72 @@ class SinalizacaoOut(BaseModel):
     gatilho: str
     status: str
     criado_em: datetime
+
+
+# ---------- Marketplace (contador ↔ estúdio) ----------
+class ContadorOut(BaseModel):
+    id: int
+    nome: str
+    crc: str
+    uf_crc: str
+    status_crc: str
+
+
+class LeadOut(BaseModel):
+    sinalizacao_id: int
+    faixa_faturamento: str
+    regiao: str
+    segmento: str
+    gatilho: str
+    pct_teto: float
+    criado_em: datetime
+    ja_manifestei: bool
+
+
+class InteresseIn(BaseModel):
+    mensagem: str
+
+
+class ManifestacaoEstudioOut(BaseModel):
+    id: int
+    contador_nome: str
+    crc: str
+    uf_crc: str
+    status_crc: str
+    mensagem_inicial: str
+    status: str
+    criado_em: datetime
+
+
+class AceitarIn(BaseModel):
+    escopo: list[str]
+
+
+class VinculoEstudioOut(BaseModel):
+    id: int
+    contador_nome: str
+    crc: str
+    uf_crc: str
+    escopo_dados: list[str]
+    status: str
+    aceito_em: datetime
+
+
+class VinculoContadorOut(BaseModel):
+    id: int
+    estudio_nome: str
+    escopo_dados: list[str]
+    status: str
+    aceito_em: datetime
+
+
+class MensagemIn(BaseModel):
+    corpo: str
+
+
+class MensagemOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    autor: str
+    corpo: str
+    criado_em: datetime

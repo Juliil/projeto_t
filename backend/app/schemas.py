@@ -9,6 +9,9 @@ class PreRegistro(BaseModel):
     email: EmailStr
     senha: str
     nome: str
+    tipo: str = "estudio"  # estudio | contador
+    crc: Optional[str] = None      # obrigatório se tipo=contador
+    uf_crc: Optional[str] = None
 
 
 class LoginIn(BaseModel):
@@ -20,6 +23,7 @@ class TokenOut(BaseModel):
     access_token: str
     token_type: str = "bearer"
     status: str
+    tipo: str = "estudio"
 
 
 class OnboardingIn(BaseModel):
@@ -32,6 +36,7 @@ class UsuarioOut(BaseModel):
     email: EmailStr
     nome: str
     status: str
+    tipo: str = "estudio"
     perfil: dict[str, Any]
 
 
